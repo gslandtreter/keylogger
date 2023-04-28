@@ -3,12 +3,10 @@ package keylogger
 import (
 	"bytes"
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
-	"syscall"
 )
 
 // KeyLogger wrapper around file descriptior
@@ -35,9 +33,6 @@ var allowedDevices = devices{"keyboard", "logitech mx keys"}
 // New creates a new keylogger for a device path
 func New(devPath string) (*KeyLogger, error) {
 	k := &KeyLogger{}
-	if !k.IsRoot() {
-		return nil, errors.New("Must be run as root")
-	}
 	fd, err := os.OpenFile(devPath, os.O_RDWR, os.ModeCharDevice)
 	k.fd = fd
 	return k, err
@@ -96,11 +91,6 @@ func FindAllKeyboardDevices() []string {
 		}
 	}
 	return valid
-}
-
-// IsRoot checks if the process is run with root permission
-func (k *KeyLogger) IsRoot() bool {
-	return syscall.Getuid() == 0 && syscall.Geteuid() == 0
 }
 
 // Read from file descriptor

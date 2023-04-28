@@ -8,7 +8,6 @@ Capture global keyboard events on Linux
 
 ## Notes
 * Only Linux based
-* Need root privilages
 
 ## Installation
 ```sh
